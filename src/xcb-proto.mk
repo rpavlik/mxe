@@ -1,18 +1,12 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libxcb
 PKG             := xcb-proto
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.6+git
-$(PKG)_CHECKSUM := 5a2d17d9f88831bf5a28bb558bd3af05cc65fc09
-$(PKG)_SUBDIR   := proto-f3ae971edce37ad96ef0b8a6059c1f853e88fcf3
-#$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := proto-f3ae971edce37ad96ef0b8a6059c1f853e88fcf3.tar.bz2
-#$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
-$(PKG)_URL      := http://cgit.freedesktop.org/xcb/proto/snapshot/$($(PKG)_FILE)
-#http://www.x.org/releases/individual/xcb/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := 82a568559235fc6e26d0a38911c5ea18f8e8455c
+$(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
+$(PKG)_URL      := http://xcb.freedesktop.org/dist/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
 
 define $(PKG)_BUILD
