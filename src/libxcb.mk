@@ -18,12 +18,13 @@ endef
 define $(PKG)_BUILD
     # cross build
     #sed -i 's_netinet/in.h_winsock.h_' '$(1)/src/xcb_conn.c'
-    cd '$(1)' && ./autogen.sh \
+    cd '$(1)' && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-build-docs \
-        --disable-shm
+        --disable-shm \
+        --enable-xkb
         
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
