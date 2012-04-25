@@ -3,11 +3,17 @@
 
 PKG             := libXdmcp
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 28132db24727552f77e998e6a6798a5b9b30789f
+$(PKG)_CHECKSUM := 3b63e8fc1600c51d9897d017da190fc6c16245b6
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

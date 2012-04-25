@@ -3,11 +3,17 @@
 
 PKG             := libFS
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 2b33fa17369605303ae70a7de1aa681879249c92
+$(PKG)_CHECKSUM := f114f32f60eb84d3e1d0e6f0dfe7679b07e91295
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

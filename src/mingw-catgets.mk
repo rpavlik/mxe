@@ -6,11 +6,11 @@ $(PKG)_IGNORE   :=
 $(PKG)_CHECKSUM := c39ef09f87c76253d01e200813167aef0bad004b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/catgets/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
+$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/Extension/catgets/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/BaseSystem/RuntimeLibrary/catgets/' | \
+    wget -q -O- 'http://sourceforge.net/projects/mingw/files/MinGW/Extension/catgets/' | \
     $(SED) -n 's,.*mingw-catgets-\([0-9][^"]*\)/".*,\1,p' | \
     head -1
 endef

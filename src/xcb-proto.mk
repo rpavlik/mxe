@@ -9,6 +9,12 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://xcb.freedesktop.org/dist/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
 
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xcb/proto/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     # cross build
     cd '$(1)' && ./autogen.sh \

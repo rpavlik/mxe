@@ -3,11 +3,17 @@
 
 PKG             := xorg-util-macros
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1c4871ba4b4c6cac894b64489053d85e0a122e60
+$(PKG)_CHECKSUM := c424a09fa6f628e24eff74496acebef13e8093b9
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/util/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/util/macros/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

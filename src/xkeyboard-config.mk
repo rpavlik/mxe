@@ -3,11 +3,17 @@
 
 PKG             := xkeyboard-config
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 1ddffae9af937a40d6da8a943c5f44abead8cfa0
+$(PKG)_CHECKSUM := 80f241325fed23278730a8cb565aa6c0e094b912
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://www.x.org/releases/individual/data/$(PKG)/$($(PKG)_FILE)
+$(PKG)_URL      := http://xorg.freedesktop.org/archive/individual/data/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

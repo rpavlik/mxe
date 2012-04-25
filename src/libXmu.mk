@@ -3,11 +3,17 @@
 
 PKG             := libXmu
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 81876a0848070bfc4476a2538fc16898eb6d96cd
+$(PKG)_CHECKSUM := 3e280aa927d78c05f94db6c7ae606f7ad132b495
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libX11 libXt libXext
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

@@ -9,6 +9,12 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libX11 libXext xorg-xextproto xorg-windowswmproto
 
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     # cross build
     cd '$(1)' && ./configure         --host='$(TARGET)'         --disable-shared         --prefix='$(PREFIX)/$(TARGET)'

@@ -3,11 +3,17 @@
 
 PKG             := libfontenc
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ba158e4c10a1aff2351ef632def03dec0e0ee11e
+$(PKG)_CHECKSUM := 90bdd53d75585dd0f06ad7bc23faccd8a01bb733
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

@@ -3,11 +3,17 @@
 
 PKG             := xorg-xextproto
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := a117fb9d7fdebee7af3f9e79efe9812e39e650a5
+$(PKG)_CHECKSUM := f969e02009adf2d51fd1ba4583a859984728a461
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/proto/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/proto/$(patsubst xorg-%,%,$(PKG))/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

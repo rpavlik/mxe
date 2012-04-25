@@ -3,11 +3,17 @@
 
 PKG             := xorg-kbproto
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := d95fada09399568c434729b436e1a09503e15b7a
+$(PKG)_CHECKSUM := a2cc82357c22a1f4d6243017982c32703c95575c
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/proto/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/proto/$(patsubst xorg-%,%,$(PKG))/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

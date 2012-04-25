@@ -3,11 +3,17 @@
 
 PKG             := libXext
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 0bf3708177b9320091ebc069e905c042c31d859d
+$(PKG)_CHECKSUM := 764ac472ae19a0faade193717a9e0938d3430aaa
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libX11 xorg-xproto xorg-xextproto
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

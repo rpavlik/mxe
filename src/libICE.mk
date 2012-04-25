@@ -3,11 +3,17 @@
 
 PKG             := libICE
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := c7d0f4c5b0e999385445b8be1bc89aec4e5de71d
+$(PKG)_CHECKSUM := ddb14df8bbc43df7322978f5f9f802936e2a7324
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros xorg-xproto xtrans libX11
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

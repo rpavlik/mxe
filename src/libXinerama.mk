@@ -3,11 +3,17 @@
 
 PKG             := libXinerama
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f030b0cfcce15502aac78188524f32a6f29bd0a4
+$(PKG)_CHECKSUM := 06a5b636305725ce09f6c3a4d5a15f2f188b5afd
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

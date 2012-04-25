@@ -3,11 +3,17 @@
 
 PKG             := xorg-server
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := ed0358b61294f1283aad42cf1e609752ceeffafd
+$(PKG)_CHECKSUM := 922b963901f4711449b53fb32ce3e14f5b642766
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/xserver/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libXaw libXfont xtrans libXau libXdmcp pixman libgcrypt xorg-xcmiscproto xorg-renderproto xorg-scrnsaverproto xorg-resourceproto xorg-xineramaproto libxkbfile
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/xserver/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

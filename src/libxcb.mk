@@ -9,6 +9,12 @@ $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://xcb.freedesktop.org/dist/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xcb-proto xorg-pthread-stubs libXau libXdmcp
 
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xcb/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
+
 define $(PKG)_BUILD
     # cross build
     #sed -i 's_netinet/in.h_winsock.h_' '$(1)/src/xcb_conn.c'

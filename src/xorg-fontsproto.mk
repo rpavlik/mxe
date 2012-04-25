@@ -3,11 +3,17 @@
 
 PKG             := xorg-fontsproto
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 77ab428ad4ad7cf0294a72a2201d665c4edf5fb1
+$(PKG)_CHECKSUM := 538f0880faa6981cb1a348ced93dc715c42840f7
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/proto/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/proto/$(patsubst xorg-%,%,$(PKG))/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build

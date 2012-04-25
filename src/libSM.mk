@@ -3,11 +3,17 @@
 
 PKG             := libSM
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f78bc72f0b3ec26cbf980f84f014422ba854544d
+$(PKG)_CHECKSUM := 8d354a165e330022ffd3606aba562b8c8154213d
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libICE xorg-xproto xtrans
+
+define $(PKG)_UPDATE
+    wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
+    $(SED) -n "s,.*<a href='[^']*/tag/?id=[^0-9]*\\([0-9][^']*\\)'.*,\\1,p" | \
+    head -1
+endef
 
 define $(PKG)_BUILD
     # cross build
