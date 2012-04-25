@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# xorg kbproto
 PKG             := xorg-kbproto
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.5
 $(PKG)_CHECKSUM := d95fada09399568c434729b436e1a09503e15b7a
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
 $(PKG)_URL      := http://www.x.org/releases/individual/proto/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
 

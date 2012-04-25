@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# xorg libX11
 PKG             := libX11
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.4.4
 $(PKG)_CHECKSUM := 2d9d38bfd7003ec60eea0b1999ab72cfd5fa3b90
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libxcb xtrans xorg-xproto xorg-xextproto xorg-kbproto xorg-inputproto
 

@@ -1,13 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 PKG             := xorg-windowswmproto
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.4
 $(PKG)_CHECKSUM := 1c9b522c66325f08bb989700b4b31911b6ae60ae
 $(PKG)_SUBDIR   := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
 $(PKG)_URL      := http://www.x.org/releases/individual/proto/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros
 

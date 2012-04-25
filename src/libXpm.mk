@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# xorg libXpm
 PKG             := libXpm
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 3.5.9
 $(PKG)_CHECKSUM := 38258a1d589d3f157e0338d0fd13eec11bc4a39b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros libX11 xorg-xproto libXt libXext
 

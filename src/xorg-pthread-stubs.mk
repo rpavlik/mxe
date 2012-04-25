@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# libxcb
 PKG             := xorg-pthread-stubs
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 0.3
 $(PKG)_CHECKSUM := 7fc486ad0ec54938f8b781cc374218f50eac8b99
 $(PKG)_SUBDIR   := lib$(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION)
 $(PKG)_FILE     := lib$(patsubst xorg-%,%,$(PKG))-$($(PKG)_VERSION).tar.bz2
-$(PKG)_WEBSITE  := http://www.x.org/
 $(PKG)_URL      := http://www.x.org/releases/individual/xcb/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc xorg-util-macros pthreads
 

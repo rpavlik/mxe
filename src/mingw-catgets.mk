@@ -1,14 +1,11 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
-# MinGW catgets implementation
 PKG             := mingw-catgets
 $(PKG)_IGNORE   :=
-$(PKG)_VERSION  := 1.0.1
 $(PKG)_CHECKSUM := c39ef09f87c76253d01e200813167aef0bad004b
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION)-src.tar.gz
-$(PKG)_WEBSITE  := http://www.mingw.org/
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/MinGW/catgets/$(PKG)-$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     :=
 
