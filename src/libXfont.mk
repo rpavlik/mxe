@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 0bf3cb8aa192ab96bbaf384d1a4a00d15a40171e
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/lib/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc xorg-util-macros libX11 xorg-xproto xtrans xorg-fontsproto libfontenc
+$(PKG)_DEPS     := gcc xorg-util-macros libX11 xorg-xproto xtrans xorg-fontsproto libfontenc freetype
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cgit.freedesktop.org/xorg/lib/$(PKG)/refs/tags' | \
