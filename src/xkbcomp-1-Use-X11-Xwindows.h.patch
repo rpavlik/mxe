@@ -1,0 +1,25 @@
+From ce42b3b3836ddb142845839f730cd04e426c3191 Mon Sep 17 00:00:00 2001
+From: Ryan Pavlik <rpavlik@iastate.edu>
+Date: Wed, 26 Oct 2011 12:17:44 -0500
+Subject: [PATCH 1/2] Use X11 Xwindows.h
+
+---
+ listing.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/listing.c b/listing.c
+index 146ecba..11de88a 100644
+--- a/listing.c
++++ b/listing.c
+@@ -108,7 +108,7 @@ SOFTWARE.
+ #endif
+ 
+ #ifdef WIN32
+-# include <windows.h>
++# include <X11/Xwindows.h>
+ # define FileName(file) file.cFileName
+ # undef TEXT
+ # undef ALTERNATE
+-- 
+1.7.7.1
+
