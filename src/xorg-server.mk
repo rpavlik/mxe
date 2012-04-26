@@ -7,7 +7,7 @@ $(PKG)_CHECKSUM := 922b963901f4711449b53fb32ce3e14f5b642766
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.x.org/releases/individual/xserver/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc xorg-util-macros libXaw libXfont xtrans libXau libXdmcp pixman libgcrypt xorg-xcmiscproto xorg-renderproto xorg-scrnsaverproto xorg-resourceproto xorg-xineramaproto libxkbfile
+$(PKG)_DEPS     := gcc xorg-util-macros libXaw libXfont xtrans libXau libXdmcp pixman libgcrypt xorg-fixesproto xorg-damageproto xorg-bigreqsproto xorg-randrproto xorg-compositeproto xorg-recordproto xorg-xcmiscproto xorg-renderproto xorg-scrnsaverproto xorg-resourceproto xorg-xineramaproto libxkbfile
 
 define $(PKG)_UPDATE
     wget -q -O- 'http://cgit.freedesktop.org/xorg/xserver/refs/tags' | \
