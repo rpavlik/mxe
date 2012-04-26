@@ -1,0 +1,58 @@
+This file is part of MXE.
+See index.html for further information.
+
+Contains ad hoc patches for cross building.
+
+From 14594ff610f8136d9dd89c7815041e489f676ed8 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 25 Apr 2012 19:21:55 -0500
+Subject: [PATCH 1/2] Append $(EXEEXT) to call of compiled tool.
+
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 71e02e7..7200c83 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -416,7 +416,7 @@ endif MAKE_LINT_LIB
+ KEYSYMDEFS=@KEYSYMDEFS@
+ 
+ ks_tables.h: $(KEYSYMDEFS) $(top_builddir)/src/util/makekeys$(EXEEXT)
+-	$(top_builddir)/src/util/makekeys $(KEYSYMDEFS) > ks_tables_h
++	$(top_builddir)/src/util/makekeys$(EXEEXT) $(KEYSYMDEFS) > ks_tables_h
+ 	mv ks_tables_h $@
+ 
+ $(top_builddir)/src/util/makekeys$(EXEEXT): force
+-- 
+1.7.10
+
+
+From 82401e1ff1f2a7eb7a52060e63d98a45cbfc1cb9 Mon Sep 17 00:00:00 2001
+From: MXE
+Date: Wed, 25 Apr 2012 19:22:46 -0500
+Subject: [PATCH 2/2] No need for X11 includes or extra libs for makekeys
+
+
+diff --git a/src/util/Makefile.am b/src/util/Makefile.am
+index dfe91f1..d022e4c 100644
+--- a/src/util/Makefile.am
++++ b/src/util/Makefile.am
+@@ -2,7 +2,6 @@
+ noinst_PROGRAMS=makekeys
+ 
+ makekeys_CFLAGS = \
+-	$(X11_CFLAGS) \
+ 	$(CWARNFLAGS)
+ 
+ makekeys_CPPFLAGS = \
+@@ -12,6 +11,8 @@ CC = @CC_FOR_BUILD@
+ CPPFLAGS = @CPPFLAGS_FOR_BUILD@
+ CFLAGS = @CFLAGS_FOR_BUILD@
+ LDFLAGS = @LDFLAGS_FOR_BUILD@
++INCLUDES = 
++LIBS = 
+ 
+ EXTRA_DIST = mkks.sh
+ 
+-- 
+1.7.10
+

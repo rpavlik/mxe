@@ -20,7 +20,7 @@ define $(PKG)_BUILD
     #$(SED) -i 's,cross_compiling=no,cross_compiling=yes,' '$(1)/configure'
     #$(SED) -i 's,makekeys ,makekeys$$(EXEEXT) ,' $(1)/src/Makefile.am
     # cross build
-    cd '$(1)' && ./configure \
+    cd '$(1)' && automake && ./configure \
         --host='$(TARGET)' \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
