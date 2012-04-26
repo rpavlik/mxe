@@ -1,0 +1,20 @@
+diff --git a/src/fontfile/catalogue.c b/src/fontfile/catalogue.c
+index 3a04a75..46babe8 100644
+--- a/src/fontfile/catalogue.c
++++ b/src/fontfile/catalogue.c
+@@ -37,6 +37,15 @@ static const char CataloguePrefix[] = "catalogue:";
+ 
+ static int CatalogueFreeFPE (FontPathElementPtr fpe);
+ 
++#ifdef __MINGW32__
++static int readlink(const char *path, char*buf, size_t bufsiz)
++{
++    /* Silly no-op implementation */
++    strncpy(buf, path, bufsiz);
++    return strlen(buf);
++}
++#endif
++
+ static int
+ CatalogueNameCheck (char *name)
+ {
