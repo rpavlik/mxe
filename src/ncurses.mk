@@ -1,5 +1,5 @@
-# This file is part of mingw-cross-env.
-# See doc/index.html for further information.
+# This file is part of MXE.
+# See index.html for further information.
 
 # ncurses
 PKG             := ncurses
@@ -11,7 +11,7 @@ $(PKG)_URL      := http://ftp.gnu.org/pub/gnu/ncurses/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/pub/gnu/ncurses/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/pub/gnu/ncurses/?C=M;O=D' | \
     $(SED) -n 's,.*<a href="ncurses-\([0-9][^"]*\)\.tar.*,\1,p' | \
     head -1
 endef
@@ -19,6 +19,7 @@ endef
 define $(PKG)_BUILD
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix=$(PREFIX)/$(TARGET) \
         --disable-home-terminfo \
         --enable-sp-funcs \

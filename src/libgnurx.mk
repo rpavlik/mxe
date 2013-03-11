@@ -10,7 +10,7 @@ $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/mingw/Other/UserContribu
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/mingw/files/Other/UserContributed/regex/' | \
     grep 'mingw-regex-' | \
     $(SED) -n 's,.*mingw-regex-\([0-9\.]*\).*,\1,p' | \
     sort | \
@@ -23,4 +23,5 @@ define $(PKG)_BUILD
         --host='$(TARGET)' \
         --prefix='$(PREFIX)/$(TARGET)'
     $(MAKE) -C '$(1)' -f Makefile.mxe -j '$(JOBS)' TARGET=$(TARGET) bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= install-static
+    ln -sf '$(PREFIX)/$(TARGET)/lib/libgnurx.a' '$(PREFIX)/$(TARGET)/lib/libregex.a'
 endef

@@ -3,14 +3,14 @@
 
 PKG             := liboauth
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 9182ca5d7e127589d132377b807d0c8a8878b122
+$(PKG)_CHECKSUM := 2631b489c150187adcca264fe813d58b2c22bf8a
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://liboauth.sourceforge.net/pool/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc curl openssl
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://liboauth.sourceforge.net/' | \
+    $(WGET) -q -O- 'http://liboauth.sourceforge.net/' | \
     $(SED) -n 's,.*liboauth-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

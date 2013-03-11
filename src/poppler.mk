@@ -3,14 +3,14 @@
 
 PKG             := poppler
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3753caecba71afaf29f097e0b9c52e0f83a10a59
+$(PKG)_CHECKSUM := 000c15d6c9cc97e9a1cb1ffba850cd809565e43a
 $(PKG)_SUBDIR   := poppler-$($(PKG)_VERSION)
 $(PKG)_FILE     := poppler-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://poppler.freedesktop.org/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc glib cairo libpng lcms jpeg tiff freetype zlib curl qt
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://poppler.freedesktop.org/' | \
+    $(WGET) -q -O- 'http://poppler.freedesktop.org/' | \
     $(SED) -n 's,.*"poppler-\([0-9.]\+\)\.tar\.gz".*,\1,p' | \
     head -1
 endef
@@ -22,6 +22,7 @@ define $(PKG)_BUILD
     #       undefined)
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-silent-rules \
         --disable-shared \
@@ -46,7 +47,8 @@ define $(PKG)_BUILD
         --disable-gtk-doc-html \
         --disable-gtk-doc-pdf \
         --with-font-configuration=win32 \
-        LIBS="`'$(TARGET)-pkg-config' zlib liblzma --libs` -ljpeg"
+        PKG_CONFIG_PATH_$(subst -,_,$(TARGET))='$(PREFIX)/$(TARGET)/qt/lib/pkgconfig' \
+        LIBTIFF_LIBS="`'$(TARGET)-pkg-config' libtiff-4 --libs`"
     $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS=
 
     # Test program

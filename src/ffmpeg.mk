@@ -3,20 +3,21 @@
 
 PKG             := ffmpeg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 743f44a71f93b14c9b26ca2424b0da8457cef4be
+$(PKG)_CHECKSUM := d82d6f53c5130ee21dcb87f76bdbdf768d3f0db9
 $(PKG)_SUBDIR   := $(PKG)-$($(PKG)_VERSION)
 $(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://www.ffmpeg.org/releases/$($(PKG)_FILE)
 $(PKG)_URL_2    := http://launchpad.net/ffmpeg/main/$($(PKG)_VERSION)/+download/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr sdl speex theora vorbis x264 xvidcore zlib
+$(PKG)_DEPS     := gcc bzip2 lame libvpx opencore-amr opus sdl speex theora vorbis x264 xvidcore zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.ffmpeg.org/download.html' | \
+    $(WGET) -q -O- 'http://www.ffmpeg.org/download.html' | \
     $(SED) -n 's,.*ffmpeg-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
 define $(PKG)_BUILD
+    '$(SED)' -i "s^[-]lvpx^`'$(TARGET)'-pkg-config --libs-only-l vpx`^g;" $(1)/configure
     cd '$(1)' && ./configure \
         --cross-prefix='$(TARGET)'- \
         --enable-cross-compile \
@@ -43,7 +44,8 @@ define $(PKG)_BUILD
         --enable-libopencore-amrnb \
         --enable-libopencore-amrwb \
         --enable-libx264 \
-        --enable-libvpx
+        --enable-libvpx \
+        --enable-libopus
     $(MAKE) -C '$(1)' -j '$(JOBS)'
     $(MAKE) -C '$(1)' -j 1 install
 endef

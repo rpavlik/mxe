@@ -3,16 +3,16 @@
 
 PKG             := ilmbase
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := fe6a910a90cde80137153e25e175e2b211beda36
+$(PKG)_CHECKSUM := 20597d2a27e3b580e0972576e6b07bf4836b5dc6
 $(PKG)_SUBDIR   := ilmbase-$($(PKG)_VERSION)
 $(PKG)_FILE     := ilmbase-$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://download.savannah.nongnu.org/releases/openexr/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.openexr.com/downloads.html' | \
+    $(WGET) -q -O- 'http://www.openexr.com/downloads.html' | \
     grep 'ilmbase-' | \
-    $(SED) -n 's,.*ilmbase-\([0-9][^>]*\)\.tar.*,\1,p' | \
+    $(SED) -n 's,.*/ilmbase-\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef
 
@@ -30,7 +30,8 @@ define $(PKG)_BUILD
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-threading \
-        CONFIG_SHELL=$(SHELL)
+        CONFIG_SHELL=$(SHELL) \
+        SHELL=$(SHELL)
     # do the first build step by hand, because programs are built that
     # generate source files
     cd '$(1)/Half' && g++ eLut.cpp -o eLut

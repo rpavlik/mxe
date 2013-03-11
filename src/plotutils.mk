@@ -11,7 +11,7 @@ $(PKG)_URL_2    := http://ftp.gnu.org/gnu/$(PKG)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libpng pthreads
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \
+    $(WGET) -q -O- 'http://ftp.gnu.org/gnu/plotutils/?C=M;O=D' | \
     grep '<a href="plotutils-' | \
     $(SED) -n 's,.*plotutils-\([0-9][^<]*\)\.tar.*,\1,p' | \
     head -1
@@ -27,5 +27,5 @@ define $(PKG)_BUILD
         --with-png \
         --without-x \
         CFLAGS='-DNO_SYSTEM_GAMMA'
-    $(MAKE) -C '$(1)' -j '$(JOBS)' install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= INFO_DEPS=
+    $(MAKE) -C '$(1)' -j 1 install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= man_MANS= INFO_DEPS=
 endef

@@ -3,14 +3,14 @@
 
 PKG             := wxwidgets
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 39552f3e49341197fea8373824ec609c757e890b
-$(PKG)_SUBDIR   := wxMSW-$($(PKG)_VERSION)
-$(PKG)_FILE     := wxMSW-$($(PKG)_VERSION).tar.bz2
+$(PKG)_CHECKSUM := 5a34ddf19d37c741f74652ee847df9568a8b81e1
+$(PKG)_SUBDIR   := wxWidgets-$($(PKG)_VERSION)
+$(PKG)_FILE     := wxWidgets-$($(PKG)_VERSION).tar.bz2
 $(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/wxwindows/$($(PKG)_VERSION)/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc libiconv libpng jpeg tiff sdl zlib expat
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
+    $(WGET) -q -O- 'http://sourceforge.net/projects/wxwindows/files/' | \
     $(SED) -n 's,.*/\([0-9][^"9]*\)/".*,\1,p' | \
     head -1
 endef

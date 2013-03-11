@@ -3,51 +3,36 @@
 
 PKG             := vmime
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := 3e8dd8855e423db438d465777efeb523c4abb5f3
-$(PKG)_SUBDIR   := lib$(PKG)-$($(PKG)_VERSION)
-$(PKG)_FILE     := lib$(PKG)-$($(PKG)_VERSION).tar.bz2
-$(PKG)_URL      := http://$(SOURCEFORGE_MIRROR)/project/$(PKG)/$(PKG)/$(call SHORT_PKG_VERSION,$(PKG))/$($(PKG)_FILE)
+$(PKG)_CHECKSUM := bf56447522efb6f376ae0e0b82da2db0367dd64e
+$(PKG)_SUBDIR   := kisli-vmime-$($(PKG)_VERSION)
+$(PKG)_FILE     := $(PKG)-$($(PKG)_VERSION).tar.gz
+$(PKG)_URL      := https://github.com/kisli/vmime/tarball/$($(PKG)_VERSION)/$(PKG)_FILE
 $(PKG)_DEPS     := gcc libiconv gnutls libgsasl pthreads zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://sourceforge.net/projects/vmime/files/vmime/' | \
-    $(SED) -n 's,.*libvmime-\([0-9][^>]*\)\.tar.*,\1,p' | \
-    tail -1
+    $(WGET) -q -O- 'https://github.com/kisli/vmime/commits/master' | \
+    $(SED) -n 's#.*<span class="sha">\([^<]\{7\}\)[^<]\{3\}<.*#\1#p' | \
+    head -1
 endef
 
 define $(PKG)_BUILD
-    # The configure script will make the real configuration, but
-    # we need scons to generate configure.in, Makefile.am etc.
-    # ansi and pedantic are too strict for mingw.
-    # http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
-    $(SED) -i "s/'-ansi', //;"                        '$(1)/SConstruct'
-    $(SED) -i "s/'-pedantic', //;"                    '$(1)/SConstruct'
-    $(SED) -i 's/pkg-config/$(TARGET)-pkg-config/g;'  '$(1)/SConstruct'
-
-    cd '$(1)' && scons autotools \
-         prefix='$(PREFIX)/$(TARGET)' \
-         target='$(TARGET)' \
-         sendmail_path=/sbin/sendmail
-
-    cd '$(1)' && ./bootstrap
-    cd '$(1)' && ./configure \
-        --prefix='$(PREFIX)/$(TARGET)' \
-        --host='$(TARGET)' \
-        --disable-shared \
-        --enable-platform-windows \
-        --disable-rpath \
-        --disable-dependency-tracking
-
-    # Disable VMIME_HAVE_MLANG_H
-    # We have the header, but there is no implementation for IMultiLanguage in MinGW
-    $(SED) -i 's,^#define VMIME_HAVE_MLANG_H 1$$,,' '$(1)/vmime/config.hpp'
+    cd '$(1)' && cmake \
+        -DCMAKE_TOOLCHAIN_FILE='$(CMAKE_TOOLCHAIN_FILE)' \
+        -DCMAKE_AR='$(PREFIX)/bin/$(TARGET)-ar' \
+        -DCMAKE_RANLIB='$(PREFIX)/bin/$(TARGET)-ranlib' \
+        -DVMIME_HAVE_MESSAGING_PROTO_SENDMAIL=False \
+        -DCMAKE_CXX_FLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
+        -DVMIME_BUILD_STATIC_LIBRARY=ON \
+        -DVMIME_BUILD_SHARED_LIBRARY=OFF \
+        .
 
     $(MAKE) -C '$(1)' -j '$(JOBS)'
+    $(SED) -i 's,^\(Libs.private:.* \)$(PREFIX)/$(TARGET)/lib/libiconv\.a,\1-liconv,g' $(1)/libvmime.pc
     $(MAKE) -C '$(1)' install
 
     $(SED) -i 's/posix/windows/g;' '$(1)/examples/example6.cpp'
     $(TARGET)-g++ -s -o '$(1)/examples/test-vmime.exe' \
         '$(1)/examples/example6.cpp' \
-        `'$(TARGET)-pkg-config' vmime --cflags --libs`
+        `'$(TARGET)-pkg-config' libvmime --cflags --libs`
     $(INSTALL) -m755 '$(1)/examples/test-vmime.exe' '$(PREFIX)/$(TARGET)/bin/'
 endef

@@ -3,14 +3,14 @@
 
 PKG             := jpeg
 $(PKG)_IGNORE   :=
-$(PKG)_CHECKSUM := f080b2fffc7581f7d19b968092ba9ebc234556ff
+$(PKG)_CHECKSUM := 724987e7690ca3d74d6ab7c1f1b6854e88ca204b
 $(PKG)_SUBDIR   := jpeg-$($(PKG)_VERSION)
 $(PKG)_FILE     := jpegsrc.v$($(PKG)_VERSION).tar.gz
 $(PKG)_URL      := http://www.ijg.org/files/$($(PKG)_FILE)
 $(PKG)_DEPS     := gcc
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://www.ijg.org/' | \
+    $(WGET) -q -O- 'http://www.ijg.org/' | \
     $(SED) -n 's,.*jpegsrc\.v\([0-9][^>]*\)\.tar.*,\1,p' | \
     head -1
 endef

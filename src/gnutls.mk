@@ -2,41 +2,44 @@
 # See index.html for further information.
 
 PKG             := gnutls
-$(PKG)_CHECKSUM := df55f60a0426de1f0efb5c1a902e209b069b3d51
+$(PKG)_CHECKSUM := f51085d8a15bc2ebe8d449fc2c9b526d1957d149
 $(PKG)_SUBDIR   := gnutls-$($(PKG)_VERSION)
 $(PKG)_FILE     := gnutls-$($(PKG)_VERSION).tar.xz
-$(PKG)_URL      := ftp://ftp.gnutls.org/pub/gnutls/$($(PKG)_FILE)
-$(PKG)_URL_2    := ftp://ftp.gnupg.org/gcrypt/gnutls/$($(PKG)_FILE)
-$(PKG)_DEPS     := gcc nettle zlib
+$(PKG)_URL      := ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1//$($(PKG)_FILE)
+$(PKG)_DEPS     := gcc gettext nettle pcre zlib
 
 define $(PKG)_UPDATE
-    wget -q -O- 'http://git.savannah.gnu.org/gitweb/?p=gnutls.git;a=tags' | \
-    grep '<a class="list name"' | \
-    $(SED) -n 's,.*<a[^>]*>gnutls_\([0-9]*_[0-9]*[02468]_[^<]*\)<.*,\1,p' | \
-    $(SED) 's,_,.,g' | \
-    grep -v '^2\.' | \
-    head -1
+    $(WGET) wget -q -O- ftp://ftp.gnutls.org/gcrypt/gnutls/v3.1/ | \
+    $(SED) -n 's,.*gnutls-\([1-9]\.[0-9].[0-9]\)\..*,\1,p' | \
+    tail -1
 endef
 
 define $(PKG)_BUILD
     $(SED) -i 's, sed , $(SED) ,g' '$(1)/gl/tests/Makefile.am'
     cd '$(1)' && aclocal -I m4 -I gl/m4 -I src/libopts/m4 --install
     cd '$(1)' && autoconf
-    cd '$(1)' && automake
+    cd '$(1)' && automake --add-missing
+    # skip the run test for libregex support since we are cross compiling
+    $(SED) -i 's/libopts_cv_with_libregex=no/libopts_cv_with_libregex=yes/g;' '$(1)/configure'
     # AI_ADDRCONFIG referenced by src/serv.c but not provided by mingw.
     # Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms737530%28v=vs.85%29.aspx
     cd '$(1)' && ./configure \
         --host='$(TARGET)' \
+        --build="`config.guess`" \
         --enable-static \
         --disable-shared \
         --prefix='$(PREFIX)/$(TARGET)' \
         --disable-nls \
         --disable-guile \
+        --disable-docs \
         --with-included-libtasn1 \
-        --with-included-libcfg \
+        --with-libregex='$(PREFIX)/$(TARGET)' \
+        --with-regex-header=pcreposix.h \
+        --with-libregex-cflags="`'$(TARGET)-pkg-config' libpcreposix --cflags`" \
+        --with-libregex-libs="`'$(TARGET)-pkg-config' libpcreposix --libs`" \
         --without-p11-kit \
         --disable-silent-rules \
-        CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400' \
+        CPPFLAGS='-DWINVER=0x0501 -DAI_ADDRCONFIG=0x0400 -DIPV6_V6ONLY=27' \
         LIBS='-lws2_32' \
         ac_cv_prog_AR='$(TARGET)-ar'
     $(MAKE) -C '$(1)' -j '$(JOBS)' install
